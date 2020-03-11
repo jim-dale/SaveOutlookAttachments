@@ -6,9 +6,9 @@ namespace SaveOutlookAttachments
 
     public class Statistics
     {
-        private Dictionary<Type, TypeStatistics> _typesStats = new Dictionary<Type, TypeStatistics>();
+        private readonly Dictionary<Type, TypeStatistics> _typesStats = new Dictionary<Type, TypeStatistics>();
 
-        public void LogStats(dynamic item)
+        public void LogStats(object item)
         {
             Type type = OutlookHelpers.GetOutlookType(item);
 
@@ -36,8 +36,8 @@ namespace SaveOutlookAttachments
 
         private class TypeStatistics
         {
-            public long Count = 0;
-            public Dictionary<string, long> _messageClassCounters = new Dictionary<string, long>();
+            public long Count { get; set; }
+            public Dictionary<string, long> _messageClassCounters { get; } = new Dictionary<string, long>();
 
             public void LogStats(dynamic item)
             {

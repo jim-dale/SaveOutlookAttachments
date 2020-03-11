@@ -1,37 +1,61 @@
-﻿
+﻿using System;
+using System.IO;
+
 namespace SaveOutlookAttachments
 {
-    using System;
-    using System.IO;
-
     public static class FileHelpers
     {
-        public static string GenerateUniqueFileName(string fileName, string saveToDirectory)
+        public static string GetPathWithEnvVars(string value)
         {
-            return GenerateUniqueFileName(fileName, String.Empty, saveToDirectory);
+            string result = string.Empty;
+
+            if (string.IsNullOrWhiteSpace(value) == false)
+            {
+                result = Environment.ExpandEnvironmentVariables(value);
+                result = Path.GetFullPath(result);
+            }
+
+            return result;
         }
 
-        public static string GenerateUniqueFileName(string fileName, string suffix, string saveToDirectory)
+        public static string CleanFileName(string path, char replaceChar)
         {
-            string result = null;
+            string result = default;
 
-            if (fileName != null)
+            if (string.IsNullOrWhiteSpace(path) == false)
             {
-                int counter = 1;
-                string baseFileName = Path.GetFileNameWithoutExtension(fileName) + suffix;
+                result = path;
+
+                foreach (char c in Path.GetInvalidFileNameChars())
+                {
+                    result = result.Replace(c, replaceChar);
+                }
+            }
+
+            return result;
+        }
+
+        public static string GenerateUniqueFileName(string folder, string fileName)
+        {
+            string result = default;
+
+            if (fileName != default)
+            {
+                string baseFileName = Path.GetFileNameWithoutExtension(fileName);
                 string extension = Path.GetExtension(fileName);
 
-                string path = $"{baseFileName}{extension}";
-                path = Path.Combine(saveToDirectory, path);
+                result = baseFileName + extension;
+                result = Path.Combine(folder, result);
 
-                while (File.Exists(path))
+                int counter = 1;
+                while (File.Exists(result))
                 {
-                    path = $"{baseFileName} ({counter}){extension}";
-                    path = Path.Combine(saveToDirectory, path);
+                    result = $"{baseFileName} ({counter}){extension}";
+                    result = Path.Combine(folder, result);
                     ++counter;
                 }
-                result = path;
             }
+
             return result;
         }
     }
