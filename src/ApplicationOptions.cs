@@ -2,7 +2,7 @@
 
 namespace SaveOutlookAttachments
 {
-    public class AppConfig
+    public class ApplicationOptions
     {
         public bool ShowHelp { get; internal set; }
         public bool ShowConfig { get; internal set; }
@@ -11,12 +11,12 @@ namespace SaveOutlookAttachments
         public string TargetFolder { get; internal set; }
         public bool WhatIf { get; internal set; }
 
-        public AppConfig()
+        public ApplicationOptions()
         {
             TargetFolder = @".\Attachments";
         }
 
-        public AppConfig UseCommandLine(string[] args)
+        public ApplicationOptions UseCommandLine(string[] args)
         {
             var state = ParseState.ExpectOption;
 
@@ -56,7 +56,7 @@ namespace SaveOutlookAttachments
             Console.WriteLine();
         }
 
-        public void OutputConfig()
+        public void OutputOptions()
         {
             Console.WriteLine($"ListStores=\"{ListStores}\"");
             Console.WriteLine($"StoreDescriptor=\"{StoreDescriptor}\"");

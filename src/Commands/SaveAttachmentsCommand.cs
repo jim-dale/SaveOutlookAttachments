@@ -24,7 +24,7 @@ namespace SaveOutlookAttachments
             {
                 outlook.Initialise();
 
-                if (outlook.TrySetStore(context.Config.StoreDescriptor))
+                if (outlook.TrySetStore(context.Options.StoreDescriptor))
                 {
                     var store = outlook.GetCurrentStore();
                     logger.LogInformation("Name=\"{DisplayName}\",Path=\"{FilePath}\",Type={ExchangeStoreType}", store.DisplayName, store.FilePath, store.ExchangeStoreType);
@@ -33,9 +33,9 @@ namespace SaveOutlookAttachments
                     {
                         outlook.ProcessItem = ProcessItem;
 
-                        if (context.Config.WhatIf == false)
+                        if (context.Options.WhatIf == false)
                         {
-                            Directory.CreateDirectory(context.Config.TargetFolder);
+                            Directory.CreateDirectory(context.Options.TargetFolder);
                         }
 
                         outlook.ForEachAttachment(context);
@@ -113,7 +113,7 @@ namespace SaveOutlookAttachments
         {
             var path = SaveAttachment(ctx, item);
 
-            if (string.IsNullOrEmpty(path) == false && ctx.Config.WhatIf == false)
+            if (string.IsNullOrEmpty(path) == false && ctx.Options.WhatIf == false)
             {
                 var embeddedMessage = outlook.OpenSharedItem(path);
 
@@ -132,12 +132,14 @@ namespace SaveOutlookAttachments
                 {
                     fileName = FileHelpers.CleanFileName(fileName, '_');
 
-                    result = FileHelpers.GenerateUniqueFileName(ctx.Config.TargetFolder, fileName);
+                    fileName = FileHelpers.GenerateUniqueFileName(ctx.Options.TargetFolder, fileName);
 
-                    logger.LogInformation("SaveAttachment\\\"{FileName}\" => \"{OutputFileName}\"", item.FileName, fileName);
-                    if (ctx.Config.WhatIf == false)
+                    string outputFile = Path.GetFullPath(fileName);
+
+                    logger.LogInformation("SaveAttachment\\\"{FileName}\" => \"{OutputFileName}\"", item.FileName, outputFile);
+                    if (ctx.Options.WhatIf == false)
                     {
-                        item.SaveAsFile(result);
+                        item.SaveAsFile(outputFile);
                     }
                 }
             }

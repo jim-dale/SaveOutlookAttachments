@@ -26,32 +26,32 @@ namespace SaveOutlookAttachments
 
             using (var serviceProvider = serviceCollection.BuildServiceProvider())
             {
-                var config = new AppConfig()
+                var options = new ApplicationOptions()
                     .UseCommandLine(args);
 
-                if (config.ShowHelp)
+                if (options.ShowHelp)
                 {
-                    AppConfig.OutputHelp();
-                    if (config.ShowConfig)
+                    ApplicationOptions.OutputHelp();
+                    if (options.ShowConfig)
                     {
-                        config.OutputConfig();
+                        options.OutputOptions();
                     }
                 }
                 else
                 {
-                    if (config.ShowConfig)
+                    if (options.ShowConfig)
                     {
-                        config.OutputConfig();
+                        options.OutputOptions();
                     }
 
                     var ctx = new AppContext
                     {
-                        Config = config
+                        Options = options
                     };
 
                     IAppCommand command = default;
 
-                    if (config.ListStores)
+                    if (options.ListStores)
                     {
                         command = serviceProvider.GetRequiredService<ListStoresCommand>();
                     }
