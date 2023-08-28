@@ -139,7 +139,14 @@ namespace SaveOutlookAttachments
                     logger.LogInformation("SaveAttachment\\\"{FileName}\" => \"{OutputFileName}\"", item.FileName, outputFile);
                     if (ctx.Options.WhatIf == false)
                     {
-                        item.SaveAsFile(outputFile);
+                        try
+                        {
+                            item.SaveAsFile(outputFile);
+                        }
+                        catch (Exception ex)
+                        {
+                            logger.LogError(ex, "SaveAttachment\\Failed to save \"{OutputFileName}\"", outputFile);
+                        }
                     }
                 }
             }
