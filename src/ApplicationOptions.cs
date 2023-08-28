@@ -51,7 +51,7 @@ namespace SaveOutlookAttachments
             Console.WriteLine("  -?                 Display this help information.");
             Console.WriteLine("  -c                 Display the current configuration information.");
             Console.WriteLine("  -l                 List the stores in the default MAPI profile.");
-            Console.WriteLine("  -s name or path    Store name of file path to a PST file.");
+            Console.WriteLine("  -s name or path    Store name or full path to a PST file.");
             Console.WriteLine("  -t path            Target folder for the attachments (default is \".\\Attachments\").");
             Console.WriteLine();
         }
